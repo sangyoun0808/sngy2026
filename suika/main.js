@@ -19,3 +19,7 @@ const render = Render.create({
         height: 850,
     },
 });
+
+//테스트 실행
+Render.run(render);
+Runner.run(engine);
