@@ -20,6 +20,38 @@ const render = Render.create({
     },
 });
 
+//벽 배치를 위한 world선언
+const world = engine.world;
+
+//벽생성
+const leftwall = Bodies.rectangle(15, 395,30, 790, {
+
+    isStatic: true,
+    render: {fillStyle: '#E6B143'}
+})
+
+const rightwall = Bodies.rectangle(605, 395, 30, 790, {
+
+    isStatic: true,
+    render: {fillStyle: '#E6B143'}
+})
+
+const ground = Bodies.rectangle(310, 820, 620, 60, {
+
+    isStatic: true,
+    render: {fillStyle: '#E6B143'}
+})
+
+const topline = Bodies.rectangle(310, 150, 620 , 2, {
+
+    isStatic: true,
+    render: {fillStyle: '#E6B143'}
+})
+
+//벽 배치
+World.add(world, [leftwal, rightwall, ground, topline]);
+
+
 //테스트 실행
 Render.run(render);
 Runner.run(engine);
