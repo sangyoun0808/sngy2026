@@ -49,7 +49,7 @@ const topline = Bodies.rectangle(310, 150, 620 , 2, {
 })
 
 //벽 배치
-World.add(world, [leftwal, rightwall, ground, topline]);
+World.add(world, [leftwall,rightwall, ground, topline]);
 
 
 //테스트 실행
