@@ -1,3 +1,5 @@
+import{FRUITS} from "/suika/fruits.js"
+
 //모듈 불러오기
 var Engine = Matter.Engine,
     Render = Matter.Render,
@@ -45,6 +47,7 @@ const ground = Bodies.rectangle(310, 820, 620, 60, {
 const topline = Bodies.rectangle(310, 150, 620 , 2, {
 
     isStatic: true,
+    isSensor: true,
     render: {fillStyle: '#E6B143'}
 })
 
@@ -55,3 +58,19 @@ World.add(world, [leftwall,rightwall, ground, topline]);
 //테스트 실행
 Render.run(render);
 Runner.run(engine);
+
+
+function addFruit() {
+    const index = 1;
+    const fruit = FRUITS[index];
+
+
+        const body = Bodies.circle(300, 50, fruit.radius, {
+            index: index,
+            render: {
+                sprite: {texture: `${fruit.name}.png`},
+            }
+        })
+        World.add(world, body)
+}
+addFruit();
