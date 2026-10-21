@@ -59,18 +59,28 @@ World.add(world, [leftwall,rightwall, ground, topline]);
 Render.run(render);
 Runner.run(engine);
 
+let currentBody = null;
+let currentFruit = null;
+
 
 function addFruit() {
-    const index = 1;
+    const index = Math.floor(Math.random() * 5);
     const fruit = FRUITS[index];
 
 
         const body = Bodies.circle(300, 50, fruit.radius, {
             index: index,
+            isSleeping : true,
             render: {
                 sprite: {texture: `${fruit.name}.png`},
-            }
+            },
+            restitution: 0.2,
         })
+
+        currentBody = body;
+        currentFruit = fruit;
+
+
         World.add(world, body)
 }
 addFruit();
