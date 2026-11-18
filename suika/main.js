@@ -49,7 +49,7 @@ const ground = Bodies.rectangle(310, 820, 620, 60, {
 })
 
 const topline = Bodies.rectangle(310, 150, 620 , 2, {
-
+    name : "topLine",
     isStatic: true,
     isSensor: true,
     render: {fillStyle: '#E6B143'}
@@ -67,6 +67,8 @@ let currentBody = null;
 let currentFruit = null;
 //키 조작을 제어하는 변수 생성
 let disableAction = false;
+//키 제어 변수 생성
+let interval = null;
 
 
 function addFruit() {
@@ -101,16 +103,33 @@ window.onkeydown = (event) => {
 
     switch(event.code) {
         case "KeyA":
-            Body.setPosition(currentBody, {
-                x: currentBody.position.x -10,
-                y: currentBody.position.y
-            });
+            if (interval)
+            return;
+
+            //인터벌 변수 사용, 밀리초 단위로 함수를 반복
+            interval = setinterval(() => {
+                if (currentBody.position.x - currentFruit.radius >30) {
+                    Body.setPosition(currentBody, {
+                    x: currentBody.position.x -10,
+                    y: currentBody.position.y
+                    });
+                }  
+
+            }, 5)
+ 
             break;
         case "KeyD":
-            Body.setPosition(currentBody, {
-                x: currentBody.position.x +10,
-                y: currentBody.position.y
-            });
+            if (interval)
+            return;
+            interval = setinterval(() => {
+                if (currentBody.position.x + currentFruit.radius < 590) {
+                    Body.setPosition(currentBody, {
+                    x: currentBody.position.x +10,
+                    y: currentBody.position.y
+                    });
+                }
+            }, 5)
+
             break;
 
         //과일 떨어트리기
@@ -128,6 +147,17 @@ window.onkeydown = (event) => {
     }
 }
 
+//인터벌 제어
+window.inkeyup = (event) => {
+    switch (event.code) {
+        case "KeyA" :
+        case "KeyD" :
+            clearInterval(interval);
+            interval = null;
+    }
+}
+
+
 //이벤트 사용
 Events.on(engine, "collisionStart", (event) =>{
     //콜리전 이벤트 발생시 생기는 모든 오브젝트를 비교
@@ -135,6 +165,9 @@ Events.on(engine, "collisionStart", (event) =>{
         //기존 과일의 index를 저장
         const index = collision.bodyA.index;
 
+        //수박일 경우
+        if (index === FRUITS.lenght - 1)
+        return;
 
         //같은 과일일 경우
         if (collision.bodyA.index == collision.bodyB.index) {
@@ -154,9 +187,21 @@ Events.on(engine, "collisionStart", (event) =>{
             })
 
             World.add(world, newBody)
+            if(newBody.index === FRUITS.lenght - 1) {
+                setTimeout(() => {
+                    alert("You made watermelon!\n축하합니다!")
+                    disableAction = true;
+                })
+            }
         }
 })
 
+        //게임 종료 조건
+        if ( !disableAction && (conllision.bodyA.name === "topLine" || collision.bodyB.name === "topLine" ) ) {
+            alert("Game Over")
+        }
+
+      
 
 })
 
